@@ -8,25 +8,31 @@ public class ColorableObject : MonoBehaviour
     public bool isColor = false;
 
     public ParticleSystem particleFX;
-    public Color tempGreyscale;
-    public Color tempColor;
+    public Color Greyscale;
+    public Color Colorful;
 
     public void MakeColorful()
     {
         StopAllCoroutines();
-        StartCoroutine(ColorFade(tempGreyscale, tempColor));
+        StartCoroutine(ColorFade(Greyscale, Colorful));
     }
 
     public void MakeGreyscale()
     {
         StopAllCoroutines();
-        StartCoroutine(ColorFade(tempColor, tempGreyscale));
+        StartCoroutine(ColorFade(Colorful, Greyscale));
     }
 
     IEnumerator ColorFade(Color colorStart, Color colorEnd)
     {
+        float startBlend = 0;
+        float endBlend = 1;
+        if (colorStart != Greyscale) {
+            startBlend = 1;
+            endBlend = 0;
+        }
         Material material = GetComponentInChildren<Renderer>().material;
-        material.color = colorStart;
+        material.SetFloat("_Blend", startBlend);
 
         Animator anim = GetComponent<Animator>();
         anim.Play("Normal", -1, 0f);
@@ -40,10 +46,10 @@ public class ColorableObject : MonoBehaviour
         float count = 0;
         while(count < 0.1f)
         {
-            material.color = Color.Lerp(colorStart, colorEnd, count / 0.1f);
+            material.SetFloat("_Blend", Mathf.Lerp(startBlend, endBlend, count / 0.1f));
             count += Time.deltaTime;
             yield return null;
         }
-        material.color = colorEnd;
+        material.SetFloat("_Blend", endBlend);
     }
 }
