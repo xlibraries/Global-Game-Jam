@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
         {
             mirrorToPick.gameObject.transform.SetParent(transform);
             mirrorToPick.gameObject.transform.localPosition = PickupLocation.localPosition;
-            mirrorToPick.gameObject.transform.localRotation = Quaternion.Euler(new Vector3(0,-90,0));
+            mirrorToPick.gameObject.transform.localRotation = Quaternion.Euler(new Vector3(-90,-90,0));
             pickedUp = true;
         } else if(Input.GetMouseButtonDown(0) && pickedUp) {
             mirrorToPick.transform.parent = null;
